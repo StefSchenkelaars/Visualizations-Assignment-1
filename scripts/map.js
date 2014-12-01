@@ -49,15 +49,32 @@ angular.module('MyApp.map')
 
   function dataLoaded(error, mapData) {
     var maxValue = d3.max(cityData.values());
-    console.log("The maximum value is " + maxValue);
     linearColorScale.domain([0.0, maxValue]);
+
+    // Add tooltip to DOM
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip top")
+        .style("opacity", 0);
+    tooltip.append("div")
+        .attr("class", "tooltip-arrow");
+    var tooltipInner = tooltip.append("div")
+        .attr("class", "tooltip-inner");
+
     g.selectAll("path")
         .data(mapData.features).enter()
         .append("path")
         .attr("d", path)
         .style("fill", function(d) { return linearColorScale(cityData.get(d.gm_code)); })
         .on("click", clicked)
-        .append("title").text(function(d) {return d.gm_naam + ", " + cityData.get(d.gm_code); })
+        .on("mouseover", function(d) {
+            tooltipInner.html(d.gm_naam + ", " + cityData.get(d.gm_code));
+            tooltip.style("opacity", .9)
+                .style("left", (d3.event.pageX - parseInt(tooltip.style('width'))/2) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            tooltip.style("opacity", 0);
+        })
     ;
   }
 
@@ -78,7 +95,7 @@ angular.module('MyApp.map')
         dy = bounds[1][1] - bounds[0][1],
         x = (bounds[0][0] + bounds[1][0]) / 2,
         y = (bounds[0][1] + bounds[1][1]) / 2,
-        scale = .9 / Math.max(dx / width, dy / height),
+        scale = .6 / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
 
     svg.transition()
