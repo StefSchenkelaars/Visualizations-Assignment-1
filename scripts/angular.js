@@ -1,14 +1,14 @@
 angular.module('MyApp', [
-  'MyApp.map'
+  'MyApp.map',
+  'ui.bootstrap'
 ])
 .controller('MainController',['$scope', function($scope) {
-  scope = this;
-  scope.selectedMunicipality = 'yay';
+  $scope.selectedMunicipality = 'yay';
 
   $scope.$on('MunicipalitySelected', function(event, municipality, element){
-    console.log(municipality.gm_naam);
-    scope.selectedMunicipality = municipality.gm_naam;
-    console.log(scope);
+    $scope.$apply(function () {
+        $scope.selectedMunicipality = municipality.gm_naam;
+    });
   });
 
 }]);

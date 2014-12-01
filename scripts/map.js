@@ -1,11 +1,12 @@
 angular.module('MyApp.map', []);
+
 angular.module('MyApp.map')
 .controller('MapController', ['$log', '$rootScope', function($log, $rootScope){
   $log.debug('MyApp.map.MapController: Initialized');
 
-  var width = 800,
-      height = 800,
-      active = d3.select(null);
+  var active = d3.select(null);
+  var width = document.getElementById("map").parentElement.offsetWidth;
+  var height = document.getElementById("map").parentElement.offsetHeight;
 
   $rootScope.data = {};
 
@@ -21,9 +22,7 @@ angular.module('MyApp.map')
       .domain([0.0, 100.0])
       .range(["white", "red"]);
 
-  var svg = d3.select("#map")
-      .attr("width", width)
-      .attr("height", height);
+  var svg = d3.select("#map");
 
   // Setup the map projection for a good depiction of The Netherlands. The
   // projection is centered on the geographical center of the country, which
@@ -58,7 +57,8 @@ angular.module('MyApp.map')
         .attr("d", path)
         .style("fill", function(d) { return linearColorScale(cityData.get(d.gm_code)); })
         .on("click", clicked)
-        .append("title").text(function(d) {return d.gm_naam + ", " + cityData.get(d.gm_code); });
+        .append("title").text(function(d) {return d.gm_naam + ", " + cityData.get(d.gm_code); })
+    ;
   }
 
   function clicked(municipality) {
