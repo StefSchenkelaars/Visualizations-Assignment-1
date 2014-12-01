@@ -38,6 +38,16 @@ angular.module('MyApp.map')
 
   var g = svg.append("g");
 
+  // Add tooltip to DOM
+  var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip top")
+      .style("opacity", 0);
+  tooltip.append("div")
+      .attr("class", "tooltip-arrow");
+  var tooltipInner = tooltip.append("div")
+      .attr("class", "tooltip-inner");
+
+  // Load city data
   queue()
       .defer(d3.json, "data/cities-geometry.json")
       .defer(d3.tsv, "data/cities-data.txt", function(d) {
@@ -51,15 +61,6 @@ angular.module('MyApp.map')
     var maxValue = d3.max(cityData.values());
     linearColorScale.domain([0.0, maxValue]);
 
-    // Add tooltip to DOM
-    var tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip top")
-        .style("opacity", 0);
-    tooltip.append("div")
-        .attr("class", "tooltip-arrow");
-    var tooltipInner = tooltip.append("div")
-        .attr("class", "tooltip-inner");
-
     g.selectAll("path")
         .data(mapData.features).enter()
         .append("path")
@@ -70,7 +71,7 @@ angular.module('MyApp.map')
             tooltipInner.html(d.gm_naam + ", " + cityData.get(d.gm_code));
             tooltip.style("opacity", .9)
                 .style("left", (d3.event.pageX - parseInt(tooltip.style('width'))/2) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
+                .style("top", (d3.event.pageY - 30) + "px");
         })
         .on("mouseout", function(d) {
             tooltip.style("opacity", 0);
@@ -81,6 +82,7 @@ angular.module('MyApp.map')
   function clicked(municipality) {
     // Broadcast the clicked Municipality
     $rootScope.$broadcast('MunicipalitySelected', municipality, this);
+    tooltip.style("opacity", 0);
   }
 
   // Zoom in on the clicked municipality
