@@ -2,7 +2,9 @@
 <meta charset="utf-8">
 <head>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <link rel="stylesheet" href="styles/angular-select.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body ng-app='MyApp' ng-hint>
 
@@ -11,7 +13,13 @@
             <svg id="map"></svg>
         </div>
         <div class='col-sm-4'>
-            <p>Hier: {{selectedMunicipality}}</p>
+            <ui-select ng-model="selectedMunicipality" theme="select2" reset-search-input="true" style="width: 100%;">
+                <ui-select-match placeholder="Zoek gemeente...">{{$select.selected.gm_naam}}</ui-select-match>
+                <ui-select-choices repeat="gm in municipalities | orderBy:GM_NAAM | filter: {GM_NAAM: $select.search}">
+                    {{ gm.GM_NAAM }}
+                </ui-select-choices>
+            </ui-select>
+
             <tabset justified="true">
                 <tab heading="Leeftijd">
                     Justified content
@@ -28,8 +36,8 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js"></script>
     <script src="scripts/angular-bootstrap.js"></script>
+    <script src="scripts/angular-select.js"></script>
     <!-- <script src="scripts/angular-hint.js"></script> -->
-
 
     <script src="//d3js.org/d3.v3.min.js"></script>
     <script src="//d3js.org/queue.v1.min.js"></script>
@@ -37,8 +45,5 @@
 
     <script src="scripts/angular.js"></script>
     <script src="scripts/map.js"></script>
-
-
-
 </body>
 </html>

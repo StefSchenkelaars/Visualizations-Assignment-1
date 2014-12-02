@@ -8,7 +8,7 @@ angular.module('MyApp.map')
   var width = document.getElementById("map").parentElement.offsetWidth;
   var height = document.getElementById("map").parentElement.offsetHeight;
 
-  $rootScope.data = {};
+  $rootScope.municipalities = [];
 
   var cityData = d3.map();
 
@@ -52,7 +52,7 @@ angular.module('MyApp.map')
       .defer(d3.json, "data/cities-geometry.json")
       .defer(d3.tsv, "data/cities-data.txt", function(d) {
         // Filter out the empty row in the cities-data.txt
-        if(d.GM_NAAM != "") $rootScope.data[d.Code] = d;
+        if(d.GM_NAAM != "") $rootScope.municipalities.push(d);
         cityData.set(d.Code, +d.AUTO_TOT);
       })
       .await(dataLoaded);
@@ -68,10 +68,17 @@ angular.module('MyApp.map')
         .style("fill", function(d) { return linearColorScale(cityData.get(d.gm_code)); })
         .on("click", clicked)
         .on("mouseover", function(d) {
-            tooltipInner.html(d.gm_naam + ", " + cityData.get(d.gm_code));
-            tooltip.style("opacity", .9)
-                .style("left", (d3.event.pageX - parseInt(tooltip.style('width'))/2) + "px")
-                .style("top", (d3.event.pageY - 30) + "px");
+            if(active.node() === null) {
+                tooltipInner.html(d.gm_naam + ", " + cityData.get(d.gm_code));
+
+                var b = path.bounds(d);
+                x = (b[1][0] + b[0][0]) / 2.0 - parseInt(tooltip.style('width')) / 2.0;
+                y = b[0][1] - parseInt(tooltip.style('height'));
+
+                tooltip.style("opacity", .9)
+                    .style("left", x + "px")
+                    .style("top", y + "px");
+            }
         })
         .on("mouseout", function(d) {
             tooltip.style("opacity", 0);
@@ -82,6 +89,8 @@ angular.module('MyApp.map')
   function clicked(municipality) {
     // Broadcast the clicked Municipality
     $rootScope.$broadcast('MunicipalitySelected', municipality, this);
+
+    // Hide the tooltip
     tooltip.style("opacity", 0);
   }
 
@@ -97,7 +106,7 @@ angular.module('MyApp.map')
         dy = bounds[1][1] - bounds[0][1],
         x = (bounds[0][0] + bounds[1][0]) / 2,
         y = (bounds[0][1] + bounds[1][1]) / 2,
-        scale = .6 / Math.max(dx / width, dy / height),
+        scale = .7 / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
 
     svg.transition()
@@ -107,6 +116,8 @@ angular.module('MyApp.map')
 
 
   function reset() {
+    // TODO set $scope.selectedMunicipality to undefined
+
     active.classed("active", false);
     active = d3.select(null);
 
