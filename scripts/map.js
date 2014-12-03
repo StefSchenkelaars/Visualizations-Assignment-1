@@ -87,19 +87,23 @@ angular.module('MyApp.map')
   }
 
   function clicked(municipality) {
+    // Hide the tooltip
+    tooltip.style("opacity", 0);
+
+    // Select the selected node
+    if (active.node() === this) return reset();
+    active.classed("active", false);
+    active = d3.select(this).classed("active", true);
+
     // Broadcast the clicked Municipality
     $rootScope.$broadcast('MunicipalitySelected', municipality, this);
 
-    // Hide the tooltip
-    tooltip.style("opacity", 0);
   }
 
   // Zoom in on the clicked municipality
   $rootScope.$on('MunicipalitySelected', function(event, municipality, element){
 
-    if (active.node() === element) return reset();
-    active.classed("active", false);
-    active = d3.select(element).classed("active", true);
+
 
     var bounds = path.bounds(municipality),
         dx = bounds[1][0] - bounds[0][0],
@@ -117,6 +121,7 @@ angular.module('MyApp.map')
 
   function reset() {
     // TODO set $scope.selectedMunicipality to undefined
+    $rootScope.$broadcast('MunicipalityDeselected');
 
     active.classed("active", false);
     active = d3.select(null);
