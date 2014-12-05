@@ -1,10 +1,13 @@
 angular.module('MyApp.map', []);
 
+var active = d3.select(null);
+var svg = d3.select("#map");
+var g = svg.append("g");
+
 angular.module('MyApp.map')
 .controller('MapController', ['$log', '$rootScope', function($log, $rootScope){
   $log.debug('MyApp.map.MapController: Initialized');
 
-  var active = d3.select(null);
   var width = document.getElementById("map").parentElement.offsetWidth;
   var height = document.getElementById("map").parentElement.offsetHeight;
 
@@ -22,8 +25,6 @@ angular.module('MyApp.map')
       .domain([0.0, 100.0])
       .range(["white", "red"]);
 
-  var svg = d3.select("#map");
-
   // Setup the map projection for a good depiction of The Netherlands. The
   // projection is centered on the geographical center of the country, which
   // happens to be the city of Lunteren.
@@ -35,8 +36,6 @@ angular.module('MyApp.map')
       .translate([width/2,height/2]);
 
   var path = d3.geo.path().projection(projection);
-
-  var g = svg.append("g");
 
   // Add tooltip to DOM
   var tooltip = d3.select("body").append("div")
@@ -61,9 +60,12 @@ angular.module('MyApp.map')
     var maxValue = d3.max(cityData.values());
     linearColorScale.domain([0.0, maxValue]);
 
+
+
     g.selectAll("path")
         .data(mapData.features).enter()
         .append("path")
+        .attr("id", function(d) { return d.gm_code }) // Set the gm_code as the id on the element
         .attr("d", path)
         .style("fill", function(d) { return linearColorScale(cityData.get(d.gm_code)); })
         .on("click", clicked)
@@ -87,24 +89,27 @@ angular.module('MyApp.map')
   }
 
   function clicked(municipality) {
-    // Hide the tooltip
-    tooltip.style("opacity", 0);
-
-    // Select the selected node
-    if (active.node() === this) return reset();
-    active.classed("active", false);
-    active = d3.select(this).classed("active", true);
+     if (active.node() === this) return reset();
 
     // Broadcast the clicked Municipality
-    $rootScope.$broadcast('MunicipalitySelected', municipality, this);
+    $rootScope.$broadcast('MunicipalitySelected', municipality);
 
   }
 
   // Zoom in on the clicked municipality
-  $rootScope.$on('MunicipalitySelected', function(event, municipality, element){
+  $rootScope.$on('MunicipalitySelected', function(event, municipality){
+    // Hide the tooltip
+    tooltip.style("opacity", 0);
 
+    // Find the element by id
+    element = document.getElementById(municipality.gm_code);
 
+    // Select the selected node
+    if (active.node() === element) return reset();
+    active.classed("active", false);
+    active = d3.select(element).classed("active", true);
 
+    // Zoom in on the element
     var bounds = path.bounds(municipality),
         dx = bounds[1][0] - bounds[0][0],
         dy = bounds[1][1] - bounds[0][1],
@@ -113,6 +118,7 @@ angular.module('MyApp.map')
         scale = .7 / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
 
+    // Transition for the zooming
     svg.transition()
         .duration(750)
         .call(zoom.translate(translate).scale(scale).event);
@@ -123,9 +129,11 @@ angular.module('MyApp.map')
     // TODO set $scope.selectedMunicipality to undefined
     $rootScope.$broadcast('MunicipalityDeselected');
 
+    // Remove selected
     active.classed("active", false);
     active = d3.select(null);
 
+    // Zoom out
     svg.transition()
         .duration(750)
         .call(zoom.translate([0, 0]).scale(1).event);

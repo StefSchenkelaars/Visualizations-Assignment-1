@@ -13,7 +13,7 @@
             <svg id="map"></svg>
         </div>
         <div class='col-sm-4'>
-            <ui-select ng-model="selectedMunicipality" theme="select2" reset-search-input="true" style="width: 100%;">
+            <ui-select ng-model="main.selectedMunicipality" on-select="main.selectItem($item, $model)" theme="select2" reset-search-input="true" style="width: 100%;">
                 <ui-select-match placeholder="Zoek gemeente...">{{$select.selected.gm_naam}}</ui-select-match>
                 <ui-select-choices repeat="gm in municipalities | orderBy:GM_NAAM | filter: {GM_NAAM: $select.search}">
                     {{ gm.GM_NAAM }}
@@ -22,7 +22,8 @@
 
             <tabset justified="true">
                 <tab heading="Leeftijd">
-                    <span ng-show="selectedMunicipality">{{extract}}</span>
+                    <spinner ng-show="main.selectedMunicipality && !main.extract"></spinner>
+                    <span>{{main.extract}}</span>
                 </tab>
                 <tab heading="Afkomst">
                     Short Labeled Justified content

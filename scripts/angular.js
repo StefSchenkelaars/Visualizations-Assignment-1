@@ -3,26 +3,35 @@ angular.module('MyApp', [
     'ui.bootstrap',
     'ui.select'
 ])
-.controller('MainController',['$scope', 'Wikipedia', function($scope, Wikipedia) {
-    $scope.selectedMunicipality = undefined;
+.controller('MainController',['$rootScope', '$scope', 'Wikipedia', function($rootScope, $scope, Wikipedia) {
+    scope = this;
+    scope.selectedMunicipality = undefined;
 
-    $scope.$on('MunicipalitySelected', function(event, municipality, element){
-        $scope.$apply(function () {
-            $scope.selectedMunicipality = municipality;
-            // Returns a promise
-            $scope.extract = undefined;
-            Wikipedia.get(municipality.gm_naam).then(function(extract){
-                $scope.extract = extract;
-            });
+    $scope.$on('MunicipalitySelected', function(event, municipality){
+        scope.selectedMunicipality = municipality;
+        scope.extract = undefined;
+        if(!$scope.$$phase) {
+            $scope.$apply();
+        }
+        Wikipedia.get(municipality.gm_naam).then(function(extract){
+            scope.extract = extract;
         });
     });
 
     $scope.$on('MunicipalityDeselected', function(){
         $scope.$apply(function () {
-            $scope.selectedMunicipality = undefined;
-            $scope.extract = undefined;
+            scope.selectedMunicipality = undefined;
+            scope.extract = undefined;
         });
     });
+
+    scope.selectItem = function(item, model){
+        data = g.selectAll('path').data();
+        var municipality = data.filter(function(element){
+            return element.gm_code === item.GM_CODE;
+        })[0];
+        $rootScope.$broadcast('MunicipalitySelected', municipality);
+    };
 
 }])
 
@@ -50,4 +59,11 @@ angular.module('MyApp', [
     };
 
 
-}]);
+}])
+
+.directive('spinner', function(){
+    return {
+        restrict: 'E',
+        template: '<div class="spinner"><div class="cube1"></div><div class="cube2"></div></div>'
+    }
+});
