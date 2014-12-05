@@ -3,12 +3,20 @@
 <head>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles/angular-select.css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body ng-app='MyApp' ng-hint>
-
-    <div class='row full-height' ng-controller='MainController as main' ng-cloak>
+    <div class='row full-height' ng-cloak>
+        <div class='col-sm-8 full-height'>
+            <dutch-map></dutch-map>
+        </div>
+        <div id="sidebar" class='col-sm-4'>
+            <municipality-selector></municipality-selector>
+            <extract></extract>
+        </div>
+    </div>
+    <!-- <div class='row full-height' ng-controller='MainController as main' ng-cloak>
         <div class='col-sm-8 full-height' ng-controller='MapController as map'>
             <svg id="map"></svg>
         </div>
@@ -33,9 +41,9 @@
                 </tab>
             </tabset>
         </div>
-    </div>
+    </div> -->
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.js"></script>
     <script src="scripts/angular-bootstrap.js"></script>
     <script src="scripts/angular-select.js"></script>
     <!-- <script src="scripts/angular-hint.js"></script> -->
@@ -45,6 +53,9 @@
     <script src="//d3js.org/topojson.v1.min.js"></script>
 
     <script src="scripts/angular.js"></script>
+    <script src="scripts/data-service.js"></script>
+    <script src="scripts/selectors.js"></script>
+    <script src="scripts/extract.js"></script>
     <script src="scripts/map.js"></script>
 </body>
 </html>
