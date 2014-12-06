@@ -86,8 +86,6 @@ angular.module('MyApp.map', [
         .domain([0.0, 100.0])
         .range(["white", "red"]);
     $scope.$on('ScopeChanged', function(){
-        console.log(Data.cityData);
-
         // Set color
         var maxValue = d3.max(Data.cityData.values());
         var minValue = d3.min(Data.cityData.values());
