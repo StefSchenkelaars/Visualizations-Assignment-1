@@ -5,11 +5,11 @@ angular.module('MyApp.selectors', [
 .directive('municipalitySelector', function(){
     return {
         restrict: 'E',
-        templateUrl: "/templates/selector.html"
+        templateUrl: "/templates/municipality-selector.html"
     }
 })
-.controller('MyApp.selector.controller', ['$log', '$scope', 'Data', function($log, $scope, Data){
-    $log.debug('MyApp.selector: Initialized');
+.controller('MyApp.selectors.MunicipalitySelectorCtrl', ['$log', '$scope', 'Data', function($log, $scope, Data){
+    $log.debug('MyApp.selectors.MunicipalitySelectorCtrl: Initialized');
 
     // Bind data to data service
     $scope.$on('DataLoaded', function(){ $scope.municipalities = Data.mapData.features; });
@@ -21,5 +21,30 @@ angular.module('MyApp.selectors', [
         var node = document.getElementById(item.gm_code);
         Data.setActiveNode(node);
     };
+
+}])
+.directive('scopeSelector', function(){
+    return {
+        restrict: 'E',
+        templateUrl: "/templates/scope-selector.html"
+    }
+})
+.controller('MyApp.selectors.ScopeSelectorCtrl', ['$log', '$scope', 'Data', function($log, $scope, Data){
+    $log.debug('MyApp.selectors.ScopeSelectorCtrl: Initialized');
+
+    // Load items from data
+    loadScopes();
+    $scope.$on('DataLoaded', loadScopes);
+    function loadScopes(){
+        $scope.scopes = Data.scopes;
+        $scope.selectedScope = $scope.scopes[0];
+        Data.setScope($scope.selectedScope);
+    }
+
+    // Select item
+    $scope.selectScope = function(item){
+        $scope.selectedScope = item;
+        Data.setScope($scope.selectedScope);
+    }
 
 }]);

@@ -1,0 +1,8 @@
+<div ng-controller='MyApp.selectors.ScopeSelectorCtrl as scopeSelector'>
+    <ui-select ng-model='selectedScope' theme='select2' on-select='selectScope($item)' search-enabled='false'>
+        <ui-select-match placeholder='Selecteer categorie'>{{$select.selected.category}} - {{$select.selected.title}}</ui-select-match>
+        <ui-select-choices repeat="scope in scopes" group-by="'category'">
+            {{scope.title}}
+        </ui-select-choices>
+    </ui-select>
+</div>
