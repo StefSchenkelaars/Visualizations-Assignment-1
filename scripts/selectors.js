@@ -11,8 +11,12 @@ angular.module('MyApp.selectors', [
 .controller('MyApp.selectors.MunicipalitySelectorCtrl', ['$log', '$scope', 'Data', function($log, $scope, Data){
     $log.debug('MyApp.selectors.MunicipalitySelectorCtrl: Initialized');
 
+    // Load data if data is already loaded or on broadcast
+    if(Data.mapData !== undefined) loadData();
+    $scope.$on('DataLoaded', loadData);
+    function loadData(){ $scope.municipalities = Data.mapData.features; }
+
     // Bind data to data service
-    $scope.$on('DataLoaded', function(){ $scope.municipalities = Data.mapData.features; });
     $scope.$on('NodeSelected', function(){ $scope.selected = Data.activeNode.data()[0]; });
     $scope.$on('NodeDeselected', function(){ $scope.selected = null; });
 
