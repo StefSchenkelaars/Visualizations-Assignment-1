@@ -1,0 +1,17 @@
+<div id='maplegend' class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{selectedScope.category}} - {{selectedScope.title}}</h3>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <span ng-repeat='item in legendItems'>
+                <dt style='background-color: {{item.color}};'></dt>
+                <dd>{{item.label}}</dd>
+            </span>
+        </dl>
+    </div>
+    <div class="panel-footer">
+        <label for='numberOfSteps' class="control-label">Precisie (tussen 2 en 25):</label>
+        <input id='numberOfSteps' type="number" ng-model="numberOfSteps" min="2" max="25" class="form-control">
+    </div>
+</div>

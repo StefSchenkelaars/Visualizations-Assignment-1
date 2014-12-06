@@ -21,14 +21,14 @@ angular.module('MyApp.map', [
     // Setup the map projection for a good depiction of The Netherlands. The
     // projection is centered on the geographical center of the country, which
     // happens to be the city of Lunteren.
-    // Make the map full height for the browser
-    var scale = height*900/50;
+    var scale = height*900/50; // Make the map full height for the browser
+    var xOffsetMap = 125; // Move the map horizontal (for the legend)
     var projection = d3.geo.albers()
         .rotate([0, 0])
         .center([5.6, 52.1])
         .parallels([50, 53])
         .scale(scale)
-        .translate([width/2,height/2 + 10]);
+        .translate([width/2 + xOffsetMap,height/2 + 10]); // Place nice in screen
 
     var path = d3.geo.path().projection(projection);
 
@@ -82,9 +82,7 @@ angular.module('MyApp.map', [
 
     //         COLORING
     //////////////////////////////
-    var linearColorScale = d3.scale.linear()
-        .domain([0.0, 100.0])
-        .range(["white", "red"]);
+    var linearColorScale = d3.scale.linear();
     $scope.$on('ScopeChanged', function(){
         // Set color
         var maxValue = d3.max(Data.cityData.values());
@@ -116,7 +114,7 @@ angular.module('MyApp.map', [
     $scope.$on('NodeSelected', function(event){
         // Hide the tooltip
         tooltip.style("opacity", 0);
-
+        var zoomScale = .7;
         var municipality = Data.activeNode.data()[0];
 
         var bounds = path.bounds(municipality),
@@ -124,8 +122,8 @@ angular.module('MyApp.map', [
             dy = bounds[1][1] - bounds[0][1],
             x = (bounds[0][0] + bounds[1][0]) / 2,
             y = (bounds[0][1] + bounds[1][1]) / 2,
-            scale = .7 / Math.max(dx / width, dy / height),
-            translate = [width / 2 - scale * x, height / 2 - scale * y];
+            scale = zoomScale / Math.max(dx / width, dy / height),
+            translate = [width / 2 - scale * x + xOffsetMap, height / 2 - scale * y];
 
         // Transition for the zooming
         svg.transition()

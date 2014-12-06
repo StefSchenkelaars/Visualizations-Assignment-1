@@ -55,6 +55,11 @@ angular.module('MyApp.data', [])
         datafield: 'AUTO_HH',
         color: 'orange'
     },{
+        title: 'Per vierkante kilometer',
+        category: "Auto's",
+        datafield: 'AUTO_LAND',
+        color: 'darkred'
+    },{
         title: 'Percentage 65+',
         category: 'Leeftijd',
         datafield: 'P_65_EO_JR',
@@ -62,6 +67,9 @@ angular.module('MyApp.data', [])
     }];
 
     return_object.setScope = function(scope){
+        // Set selected scope
+        return_object.selectedScope = scope;
+
         // Clear city data
         return_object.cityData = d3.map();
 

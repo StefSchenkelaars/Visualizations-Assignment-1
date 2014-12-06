@@ -1,3 +1,4 @@
+/* Hide all elements until loaded complete */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
@@ -40,6 +41,26 @@ path {
 .select2-container {
     width: 100%;
 }
+
+/* Legend */
+#maplegend {
+    width: 200px;
+    border-radius: 0;
+    position: fixed;
+    left: 5px;
+    top: 5px;
+}
+dt {
+    width: 20px !important;
+    height: 20px;
+}
+dd {
+    margin-left: 25px !important;
+}
+dl {
+    margin: 0;
+}
+
 
 /* Spinner */
 .spinner {

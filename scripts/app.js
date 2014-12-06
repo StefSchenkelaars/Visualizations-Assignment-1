@@ -1,5 +1,6 @@
 angular.module('MyApp', [
     'MyApp.map',
+    'MyApp.legend',
     'MyApp.extract',
     'MyApp.selectors'
 ])
