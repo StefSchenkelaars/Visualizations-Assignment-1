@@ -3,8 +3,10 @@
     <svg id="results">
         <filter xmlns="http://www.w3.org/2000/svg" id="dropshadow" height="150%" width="150%">
             <feOffset result="offOut" in="SourceAlpha" />
-            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="2.5" />
             <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
         </filter>
+        <line class="left" stroke-dasharray="5, 10" y1="0" y2="100%" />
+        <line class="right" stroke-dasharray="5, 10" y1="0" y2="100%" />
     </svg>
 </div>

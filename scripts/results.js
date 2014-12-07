@@ -15,10 +15,10 @@ angular.module('MyApp.results', [
     var width = document.getElementById("results").offsetWidth - margin.left - margin.right;
     var height = document.getElementById("results").offsetHeight - margin.top - margin.bottom;
 
-    var svg = d3.select("#results")
+    var rootSvg = d3.select("#results")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
+        .attr("height", height + margin.top + margin.bottom);
+    var svg = rootSvg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var x = d3.scale.ordinal()
@@ -66,7 +66,7 @@ angular.module('MyApp.results', [
         }
 
         // Get interesting cities
-        if (i > 2 && i < cities.length - 3) {
+        if (i >= 2 && i <= cities.length - 3) {
             for (var j = 0; j < 2; j++) {
                 $scope.results.push( getCity(cities, j, j == i) );
             }
@@ -92,6 +92,31 @@ angular.module('MyApp.results', [
         x.domain($scope.results.map(function(d) { return d.municipality.GM_NAAM; }));
         y.domain([0, d3.max($scope.results, function(d) { return d.value; })]);
 
+        // Set 'jump' lines
+        rootSvg.selectAll("line").style('visibility', 'hidden');
+        if (i >= 2 && i <= cities.length - 3) {
+            if (i > 3) {
+                var posX = x($scope.results[2].municipality.GM_NAAM) + 55;
+                rootSvg.select("line.left")
+                    .style('visibility', 'visible')
+                    .attr('x1', posX)
+                    .attr('x2', posX);
+            }
+            if (i < cities.length - 4) {
+                var posX = x($scope.results[$scope.results.length - 2].municipality.GM_NAAM) + 54;
+                rootSvg.select("line.right")
+                    .style('visibility', 'visible')
+                    .attr('x1', posX)
+                    .attr('x2', posX);
+            }
+        } else {
+            var posX = x($scope.results[3].municipality.GM_NAAM) + 55;
+            rootSvg.select("line.left")
+                .style('visibility', 'visible')
+                .attr('x1', posX)
+                .attr('x2', posX);
+        }
+
         // Coloring
         var linearColorScale = d3.scale.linear()
             .domain([0, $scope.results[0].value])
@@ -100,7 +125,7 @@ angular.module('MyApp.results', [
         // Render x-axis
         svg.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(10," + height + ")")
+            .attr("transform", "translate(0," + height + ")")
             .call(xAxis)
             .selectAll("text")
                 .style("text-anchor", "end")
