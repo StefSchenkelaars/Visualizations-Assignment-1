@@ -1,21 +1,21 @@
-angular.module('MyApp.results', [
+angular.module('MyApp.origin', [
     'MyApp.data'
 ])
-.directive('results', [function(){
+.directive('origin', [function(){
     return {
         restrict: 'E',
-        templateUrl: 'templates/results.html',
-        controller: 'MyApp.results.controller'
+        templateUrl: 'templates/origin.html',
+        controller: 'MyApp.origin.controller'
     }
 }])
-.controller('MyApp.results.controller', ['$log', '$scope', 'Data', function($log, $scope, Data) {
-    $log.debug('MyApp.results.controller: Initialized');
+.controller('MyApp.origin.controller', ['$log', '$scope', 'Data', function($log, $scope, Data) {
+    $log.debug('MyApp.origin.controller: Initialized');
 
     var margin = {top: 10, right: 20, bottom: 80, left: 60};
-    var width = document.getElementById("results").offsetWidth - margin.left - margin.right;
-    var height = document.getElementById("results").offsetHeight - margin.top - margin.bottom;
+    var width = document.getElementById("origin").offsetWidth - margin.left - margin.right;
+    var height = document.getElementById("origin").offsetHeight - margin.top - margin.bottom;
 
-    var rootSvg = d3.select("#results")
+    var rootSvg = d3.select("#origin")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom);
     var svg = rootSvg.append("g")
@@ -26,6 +26,10 @@ angular.module('MyApp.results', [
 
     var y = d3.scale.linear()
         .range([height, 0]);
+
+    var color = d3.scale.ordinal()
+        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c"]) //, "#ff8c00"]);
+        .domain([0, 1, 2, 3, 4, 5]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -38,11 +42,11 @@ angular.module('MyApp.results', [
 
     $scope.results = [];
 
-    $scope.$on('ScopeChanged', RenderResults);
-    $scope.$on('NodeSelected', RenderResults);
-    $scope.$on('NodeDeselected', RenderResults);
+    $scope.$on('ScopeChanged', RenderOrigin);
+    $scope.$on('NodeSelected', RenderOrigin);
+    $scope.$on('NodeDeselected', RenderOrigin);
 
-    function RenderResults() {
+    function RenderOrigin() {
         $scope.results = [];
         var cities = [];
 
@@ -89,8 +93,19 @@ angular.module('MyApp.results', [
         svg.selectAll("*").remove();
 
         // Compute domain
+        $scope.results.forEach(function (d) {
+            var y0 = 0;
+            d.values = color.domain().map(function (i) {
+                return {
+                    i: i,
+                    y0: y0,
+                    y1: y0 += +d.origin[i]
+                };
+            });
+            d.total = d.values[d.values.length - 1].y1;
+        });
         x.domain($scope.results.map(function(d) { return d.municipality.GM_NAAM; }));
-        y.domain([0, d3.max($scope.results, function(d) { return d.value; })]);
+        y.domain([0, d3.max($scope.results, function(d) { return d.total; })]);
 
         // Set 'jump' lines
         rootSvg.selectAll("line").style('visibility', 'hidden');
@@ -117,11 +132,6 @@ angular.module('MyApp.results', [
                 .attr('x2', posX);
         }
 
-        // Coloring
-        var linearColorScale = d3.scale.linear()
-            .domain([$scope.results[$scope.results.length - 1].value, $scope.results[0].value])
-            .range(["white", Data.selectedScope.color]);
-
         // Render x-axis
         svg.append("g")
             .attr("class", "x axis")
@@ -139,16 +149,19 @@ angular.module('MyApp.results', [
             .call(yAxis);
 
         // Render bars
-        svg.selectAll(".bar")
+        var bars = svg.selectAll(".bar")
             .data($scope.results)
-            .enter().append("rect")
+            .enter().append("g")
                 .attr("class", "bar")
-                .attr("x", function(d) { return x(d.municipality.GM_NAAM); })
-                .attr("width", x.rangeBand())
-                .attr("y", function(d) { return y(d.value); })
-                .attr("height", function(d) { return height - y(d.value); })
-                .style("fill", function(d) {
-                    return linearColorScale(d.value)
+                // .attr("x", function(d) { return x(d.municipality.GM_NAAM); })
+                // .attr("width", x.rangeBand())
+                // .attr("y", function(d) { return y(d.total); })
+                // .attr("height", function(d) { return height - y(d.total); })
+                // .style("fill", function(d) {
+                //     return color(0);
+                // })
+                .attr("transform", function (d) {
+                    return "translate(" + x(d.municipality.GM_NAAM) + ",0)";
                 })
                 .style("filter", function(d) {
                     if (d.current) return 'url(#dropshadow)';
@@ -162,55 +175,42 @@ angular.module('MyApp.results', [
                     }
                 });
 
-        // Render text in bar
-        svg.selectAll(".text")
-            .data($scope.results)
-            .enter().append("text")
-                .attr("class", "text")
-                .attr("x", function(d) { return x(d.municipality.GM_NAAM); })
-                .attr("dx", x.rangeBand() / 2)
-                .attr("y", function(d) {
-                    if (y(d.value) > height - 22) return y(d.value) - 22;
-                    return y(d.value);
+        bars.selectAll("rect")
+            .data(function (d) {
+                return d.values;
+            })
+            .enter().append("rect")
+                .attr("width", x.rangeBand())
+                .attr("y", function (d) {
+                    return y(d.y1);
                 })
-                .attr("dy", "15px")
-                .attr("text-anchor", "middle")
-                .style("fill", function(d) {
-                    if (y(d.value) > height - 22) return 'black';
-                    return getContrastYIQ( linearColorScale(d.value) );
+                .attr("height", function (d) {
+                    return y(d.y0) - y(d.y1);
                 })
-                .text(function(d) { return d.value; })
-                .on("click", function(d) {
-                    if (Data.activeNode.data()[0] !== undefined && Data.activeNode.data()[0].gm_code == d.gm) {
-                        Data.setActiveNode(null);
-                    } else {
-                        var node = document.getElementById(d.gm);
-                        Data.setActiveNode(node);
-                    }
+                .style("fill", function (d) {
+                    return color(d.i);
                 });
     }
 
     function getCity(cities, i, current) {
         for (var j in Data.municipalities) {
             if (Data.municipalities[j].Code == cities[i].gm) {
-                return city = {
+                return {
                     'gm': cities[i].gm,
                     'municipality': Data.municipalities[j],
-                    'value': cities[i].value,
+                    'origin': [
+                        +Data.municipalities[j].P_WEST_AL,
+                        +Data.municipalities[j].P_MAROKKO,
+                        +Data.municipalities[j].P_ANT_ARU,
+                        +Data.municipalities[j].P_SURINAM,
+                        +Data.municipalities[j].P_TURKIJE,
+                        +Data.municipalities[j].P_OVER_NW
+                    ],
                     'current': current
                 };
             }
         }
 
         return null;
-    }
-
-    // http://24ways.org/2010/calculating-color-contrast/
-    function getContrastYIQ(hexcolor) {
-        var r = parseInt(hexcolor.substr(1,2),16);
-        var g = parseInt(hexcolor.substr(3,2),16);
-        var b = parseInt(hexcolor.substr(5,2),16);
-        var yiq = ((r*299)+(g*587)+(b*114))/1000;
-        return (yiq >= 128) ? 'black' : 'white';
     }
 }])

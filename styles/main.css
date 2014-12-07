@@ -43,12 +43,15 @@ div#scope-panel {
     background-color: #406473;
 }
 
-#extract {
-    background-color: #EBF2F0;
+div#extract {
     padding: 10px;
     margin: 0;
     height: 10em !important;
     overflow-y: scroll;
+    border-bottom: 1px solid #B9BFBD;
+}
+
+div#results-panel {
     border-bottom: 1px solid #B9BFBD;
 }
 
@@ -133,33 +136,34 @@ dl {
                 }
 
 /* Results bar chart styling */
-svg#results {
+svg#results, svg#origin {
     margin: 0;
     width: 100%;
-    height: 18em !important;
-    border-bottom: 1px solid #B9BFBD;
+    height: 260px;
 }
 
-svg#results g.axis path {
+svg#results g.axis path, svg#origin g.axis path {
     fill: #EBF2F0;
     stroke: #B9BFBD;
     stroke-width: 1px;
+    shape-rendering: crispEdges;
 }
 
-svg#results g.tick text {
+svg#results g.tick text, svg#origin g.tick text {
     font-size: 12px;
     color: #444;
 }
 
 svg#results text.text {
     font-size: 11px;
-}
-
-svg#results .bar, svg#results text.text {
     cursor: pointer;
 }
 
-svg#results line {
+svg#results .bar, svg#origin .bar {
+    cursor: pointer;
+}
+
+svg#results line, svg#origin line {
     stroke: #B9BFBD;
     stroke-dasharray: 5, 10;
     visibility: hidden;

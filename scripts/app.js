@@ -3,7 +3,8 @@ angular.module('MyApp', [
     'MyApp.legend',
     'MyApp.extract',
     'MyApp.selectors',
-    'MyApp.results'
+    'MyApp.results',
+    'MyApp.origin'
 ])
 .directive('spinner', function(){
     return {
