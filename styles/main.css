@@ -6,7 +6,6 @@
 html, body {
     width: 100%;
     height: 100%;
-    overflow: hidden;
 }
 
 svg#map {
@@ -31,12 +30,16 @@ div.sidebar-top {
     min-height: 100%;
     height: auto !important;
     margin-bottom: -605px;
+    background-color: #EBF2F0;
 }
 
-div.sidebar-bottom {
+div.sidebar-top:after {
+    content: "";
+    display: block;
+}
+
+div.sidebar-bottom, div.sidebar-top:after {
     height: 605px;
-    overflow: hidden;
-    clear: both;
 }
 
 div.clear {
@@ -47,7 +50,6 @@ div.clear {
     padding-left: 0;
     background-color: #EBF2F0;
     height: 100%;
-    overflow: scroll;
 }
 
 div#municipality-panel {

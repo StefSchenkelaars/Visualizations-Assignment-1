@@ -35,7 +35,8 @@ angular.module('MyApp.map', [
     // Add tooltip to DOM
     var tooltip = d3.select("body").append("div")
       .attr("class", "tooltip top")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style("top", 0);
     tooltip.append("div")
       .attr("class", "tooltip-arrow");
     var tooltipInner = tooltip.append("div")
