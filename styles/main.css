@@ -27,10 +27,27 @@ div.full-height {
     padding: 0;
 }
 
+div.sidebar-top {
+    min-height: 100%;
+    height: auto !important;
+    margin-bottom: -605px;
+}
+
+div.sidebar-bottom {
+    height: 605px;
+    overflow: hidden;
+    clear: both;
+}
+
+div.clear {
+    clear: both;
+}
+
 #sidebar {
     padding-left: 0;
     background-color: #EBF2F0;
     height: 100%;
+    overflow: scroll;
 }
 
 div#municipality-panel {
@@ -46,12 +63,12 @@ div#scope-panel {
 div#extract {
     padding: 10px;
     margin: 0;
-    height: 10em !important;
+    min-height: 10em !important;
     overflow-y: scroll;
-    border-bottom: 1px solid #B9BFBD;
 }
 
 div#results-panel {
+    border-top: 1px solid #B9BFBD;
     border-bottom: 1px solid #B9BFBD;
 }
 
@@ -73,11 +90,12 @@ div#results-panel {
     top: 5px;
 }
 dt {
-    width: 20px !important;
-    height: 20px;
+    width: 18px !important;
+    height: 18px;
+    margin: 1px 0;
 }
 dd {
-    margin-left: 25px !important;
+    margin-left: 24px !important;
 }
 dl {
     margin: 0;

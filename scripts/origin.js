@@ -31,6 +31,18 @@ angular.module('MyApp.origin', [
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c"]) //, "#ff8c00"]);
         .domain([0, 1, 2, 3, 4, 5]);
 
+    var originString = function(i) {
+        var o = [
+            'Westers',
+            'Marrokaans',
+            'Antilliaans',
+            'Surinaams',
+            'Turkije',
+            'Overig'
+        ];
+        return o[i];
+    }
+
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
@@ -38,7 +50,7 @@ angular.module('MyApp.origin', [
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
-        .ticks(5);
+        .ticks(5, "%");
 
     $scope.results = [];
 
@@ -175,6 +187,7 @@ angular.module('MyApp.origin', [
                     }
                 });
 
+        // Fill bars
         bars.selectAll("rect")
             .data(function (d) {
                 return d.values;
@@ -190,6 +203,30 @@ angular.module('MyApp.origin', [
                 .style("fill", function (d) {
                     return color(d.i);
                 });
+
+        // Display a legend
+        var legend = svg.selectAll(".legend")
+            .data(color.domain().slice().reverse())
+            .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function (d, i) {
+                    return "translate(0," + i * 20 + ")";
+                });
+
+        legend.append("rect")
+            .attr("x", width - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", color);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function (d) {
+                return originString(d);
+            });
     }
 
     function getCity(cities, i, current) {
@@ -199,12 +236,12 @@ angular.module('MyApp.origin', [
                     'gm': cities[i].gm,
                     'municipality': Data.municipalities[j],
                     'origin': [
-                        +Data.municipalities[j].P_WEST_AL,
-                        +Data.municipalities[j].P_MAROKKO,
-                        +Data.municipalities[j].P_ANT_ARU,
-                        +Data.municipalities[j].P_SURINAM,
-                        +Data.municipalities[j].P_TURKIJE,
-                        +Data.municipalities[j].P_OVER_NW
+                        +Data.municipalities[j].P_WEST_AL / 100.0,
+                        +Data.municipalities[j].P_MAROKKO / 100.0,
+                        +Data.municipalities[j].P_ANT_ARU / 100.0,
+                        +Data.municipalities[j].P_SURINAM / 100.0,
+                        +Data.municipalities[j].P_TURKIJE / 100.0,
+                        +Data.municipalities[j].P_OVER_NW / 100.0
                     ],
                     'current': current
                 };
