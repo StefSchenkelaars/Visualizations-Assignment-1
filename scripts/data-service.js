@@ -62,54 +62,46 @@ angular.module('MyApp.data', [])
         title: 'Totaal',
         category: 'Populatie',
         datafield: 'AANT_INW',
-        color: 'green',
-        textColor: 'white'
+        color: 'green'
     },{
         title: 'Per vierkante kilometer',
         category: 'Populatie',
         datafield: 'BEV_DICHTH',
-        color: 'aquamarine',
-        textColor: 'black'
-    },{
-        title: 'Adressen per vierkante kilometer',
-        category: 'Populatie',
-        datafield: 'OAD',
-        color: 'lightgreen',
-        textColor: 'black'
+        color: 'aquamarine'
+    // },{
+    //     title: 'Adressen per vierkante kilometer',
+    //     category: 'Populatie',
+    //     datafield: 'OAD',
+    //     color: 'lightgreen'
     },{
         title: 'Percentage man',
         category: 'Populatie',
         datafield: 'P_MAN',
-        color: 'darkgreen',
-        textColor: 'white'
+        color: 'darkgreen'
     },
     // AUTOS
     {
         title: 'Totaal',
         category: "Auto's",
         datafield: 'AUTO_TOT',
-        color: 'red',
-        textColor: 'white'
+        color: 'red'
     },{
         title: 'Per huishouden',
         category: "Auto's",
         datafield: 'AUTO_HH',
-        color: 'orange',
-        textColor: 'black'
+        color: 'orange'
     },{
         title: 'Per vierkante kilometer',
         category: "Auto's",
         datafield: 'AUTO_LAND',
-        color: 'darkred',
-        textColor: 'white'
+        color: 'darkred'
     },
     // Leeftijd
     {
         title: 'Percentage 65+',
         category: 'Leeftijd',
         datafield: 'P_65_EO_JR',
-        color: 'blue',
-        textColor: 'white'
+        color: 'blue'
     }];
 
     return_object.setScope = function(scope){
