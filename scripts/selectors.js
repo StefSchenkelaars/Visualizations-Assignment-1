@@ -5,7 +5,7 @@ angular.module('MyApp.selectors', [
 .directive('municipalitySelector', function(){
     return {
         restrict: 'E',
-        templateUrl: "/templates/municipality-selector.html"
+        templateUrl: "templates/municipality-selector.html"
     }
 })
 .controller('MyApp.selectors.MunicipalitySelectorCtrl', ['$log', '$scope', 'Data', function($log, $scope, Data){
@@ -30,7 +30,7 @@ angular.module('MyApp.selectors', [
 .directive('scopeSelector', function(){
     return {
         restrict: 'E',
-        templateUrl: "/templates/scope-selector.html"
+        templateUrl: "templates/scope-selector.html"
     }
 })
 .controller('MyApp.selectors.ScopeSelectorCtrl', ['$log', '$scope', 'Data', function($log, $scope, Data){

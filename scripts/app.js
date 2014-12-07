@@ -2,7 +2,8 @@ angular.module('MyApp', [
     'MyApp.map',
     'MyApp.legend',
     'MyApp.extract',
-    'MyApp.selectors'
+    'MyApp.selectors',
+    'MyApp.topfive'
 ])
 .directive('spinner', function(){
     return {

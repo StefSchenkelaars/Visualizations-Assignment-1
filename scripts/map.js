@@ -66,7 +66,7 @@ angular.module('MyApp.map', [
                     }
 
                     var b = path.bounds(d);
-                    x = (b[1][0] + b[0][0]) / 2.0 - parseInt(tooltip.style('width')) / 2.0;
+                    x = (b[1][0] + b[0][0]) / 2.0 - parseInt(tooltip.style('width')) / 2.0 - 15;
                     y = b[0][1] - parseInt(tooltip.style('height'));
 
                     tooltip.style("opacity", .9)

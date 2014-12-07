@@ -4,7 +4,7 @@ angular.module('MyApp.legend', [
 .directive('mapLegend', function(){
     return {
         restrict: 'E',
-        templateUrl: '/templates/legend.html',
+        templateUrl: 'templates/legend.html',
         controller: 'MyApp.legend.LegendController'
     }
 })

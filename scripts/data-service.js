@@ -48,22 +48,26 @@ angular.module('MyApp.data', [])
         title: 'Totaal',
         category: "Auto's",
         datafield: 'AUTO_TOT',
-        color: 'red'
+        color: 'red',
+        textColor: 'white'
     },{
         title: 'Per huishouden',
         category: "Auto's",
         datafield: 'AUTO_HH',
-        color: 'orange'
+        color: 'orange',
+        textColor: 'black'
     },{
         title: 'Per vierkante kilometer',
         category: "Auto's",
         datafield: 'AUTO_LAND',
-        color: 'darkred'
+        color: 'darkred',
+        textColor: 'white'
     },{
         title: 'Percentage 65+',
         category: 'Leeftijd',
         datafield: 'P_65_EO_JR',
-        color: 'blue'
+        color: 'blue',
+        textColor: 'white'
     }];
 
     return_object.setScope = function(scope){
