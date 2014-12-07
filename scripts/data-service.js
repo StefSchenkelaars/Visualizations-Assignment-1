@@ -11,6 +11,18 @@ angular.module('MyApp.data', [])
         .defer(d3.tsv, "data/cities-data.txt", function(d) {
             // Filter out the empty row in the cities-data.txt
             if(d.GM_NAAM != "") {
+
+                // Clean data from negative values!
+                for (var property in d) {
+                    if (d.hasOwnProperty(property)) {
+                        if(d[property] < 0) d[property] = null;
+                    }
+                };
+
+                // Generate extra data
+                d.P_MAN = sigFigs((d.AANT_MAN/d.AANT_INW)*100, 4);
+                d.P_VROUW = sigFigs((d.AANT_VROUW/d.AANT_INW)*100, 4);
+
                 return_object.municipalities.push(d);
             }
         })
@@ -44,7 +56,35 @@ angular.module('MyApp.data', [])
     //////////////////////////////
     return_object.cityData = d3.map();
     return_object.mapColor = 'white';
-    return_object.scopes = [{
+    return_object.scopes = [
+    // POPULATIE
+    {
+        title: 'Totaal',
+        category: 'Populatie',
+        datafield: 'AANT_INW',
+        color: 'green',
+        textColor: 'white'
+    },{
+        title: 'Per vierkante kilometer',
+        category: 'Populatie',
+        datafield: 'BEV_DICHTH',
+        color: 'aquamarine',
+        textColor: 'black'
+    },{
+        title: 'Adressen per vierkante kilometer',
+        category: 'Populatie',
+        datafield: 'OAD',
+        color: 'lightgreen',
+        textColor: 'black'
+    },{
+        title: 'Percentage man',
+        category: 'Populatie',
+        datafield: 'P_MAN',
+        color: 'darkgreen',
+        textColor: 'white'
+    },
+    // AUTOS
+    {
         title: 'Totaal',
         category: "Auto's",
         datafield: 'AUTO_TOT',
@@ -62,7 +102,9 @@ angular.module('MyApp.data', [])
         datafield: 'AUTO_LAND',
         color: 'darkred',
         textColor: 'white'
-    },{
+    },
+    // Leeftijd
+    {
         title: 'Percentage 65+',
         category: 'Leeftijd',
         datafield: 'P_65_EO_JR',
