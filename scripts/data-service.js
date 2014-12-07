@@ -57,7 +57,7 @@ angular.module('MyApp.data', [])
     return_object.cityData = d3.map();
     return_object.mapColor = 'white';
     return_object.scopes = [
-    // POPULATIE
+    // POPULATIE (GREEN)
     {
         title: 'Totaal',
         category: 'Populatie',
@@ -67,7 +67,7 @@ angular.module('MyApp.data', [])
         title: 'Per vierkante kilometer',
         category: 'Populatie',
         datafield: 'BEV_DICHTH',
-        color: 'aquamarine'
+        color: 'seagreen'
     // },{
     //     title: 'Adressen per vierkante kilometer',
     //     category: 'Populatie',
@@ -79,7 +79,7 @@ angular.module('MyApp.data', [])
         datafield: 'P_MAN',
         color: 'darkgreen'
     },
-    // AUTOS
+    // AUTOS (RED)
     {
         title: 'Totaal',
         category: "Auto's",
@@ -89,14 +89,14 @@ angular.module('MyApp.data', [])
         title: 'Per huishouden',
         category: "Auto's",
         datafield: 'AUTO_HH',
-        color: 'orange'
+        color: 'maroon'
     },{
         title: 'Per vierkante kilometer',
         category: "Auto's",
         datafield: 'AUTO_LAND',
         color: 'darkred'
     },
-    // Burgelijke staat
+    // Burgelijke staat (GRAY)
     {
         title: 'Percentage getrouwd',
         category: 'Burgelijke staat',
@@ -108,7 +108,7 @@ angular.module('MyApp.data', [])
         datafield: 'P_HH_M_K',
         color: 'black'
     },
-    // Leeftijd
+    // Leeftijd (BLUE)
     {
         title: 'Percentage 65+',
         category: 'Leeftijd',
@@ -119,6 +119,11 @@ angular.module('MyApp.data', [])
         category: 'Leeftijd',
         datafield: 'P_00_04_JR',
         color: 'darkblue'
+    },{
+        title: 'Percentage kinderen tot 15 jaar',
+        category: 'Leeftijd',
+        datafield: 'P_00_14_JR',
+        color: 'navy'
     }];
 
     return_object.setScope = function(scope){
