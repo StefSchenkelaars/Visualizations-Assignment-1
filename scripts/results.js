@@ -4,7 +4,7 @@ angular.module('MyApp.results', [
 .directive('results', [function(){
     return {
         restrict: 'E',
-        template: '<div id="results-panel"><h3>Resultaten vergelijken</h3><svg id="results"></svg></div>',
+        templateUrl: 'templates/results.html',
         controller: 'MyApp.results.controller'
     }
 }])
@@ -66,7 +66,7 @@ angular.module('MyApp.results', [
         }
 
         // Get interesting cities
-        if (i > 3 && i < cities.length - 4) {
+        if (i > 2 && i < cities.length - 3) {
             for (var j = 0; j < 2; j++) {
                 $scope.results.push( getCity(cities, j, j == i) );
             }
@@ -125,8 +125,16 @@ angular.module('MyApp.results', [
                 .style("fill", function(d) {
                     return linearColorScale(d.value)
                 })
-                .style("stroke", function(d) {
-                    if (d.current) return 'black';
+                .style("filter", function(d) {
+                    if (d.current) return 'url(#dropshadow)';
+                })
+                .on("click", function(d) {
+                    if (Data.activeNode.data()[0] !== undefined && Data.activeNode.data()[0].gm_code == d.gm) {
+                        Data.setActiveNode(null);
+                    } else {
+                        var node = document.getElementById(d.gm);
+                        Data.setActiveNode(node);
+                    }
                 });
 
         // Render text in bar
@@ -146,7 +154,15 @@ angular.module('MyApp.results', [
                     if (y(d.value) > height - 40) return 'black';
                     return Data.selectedScope.textColor
                 })
-                .text(function(d) { return d.value; });
+                .text(function(d) { return d.value; })
+                .on("click", function(d) {
+                    if (Data.activeNode.data()[0] !== undefined && Data.activeNode.data()[0].gm_code == d.gm) {
+                        Data.setActiveNode(null);
+                    } else {
+                        var node = document.getElementById(d.gm);
+                        Data.setActiveNode(node);
+                    }
+                });
     }
 
     function getCity(cities, i, current) {
