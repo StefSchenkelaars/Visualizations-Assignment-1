@@ -1,4 +1,4 @@
-<div ng-controller='MyApp.selectors.MunicipalitySelectorCtrl as selector'>
+<div ng-controller='MyApp.selectors.MunicipalitySelectorCtrl as selector' id='municipality-panel'>
     <ui-select ng-model='selected' theme='select2' on-select='selectItem($item, $model)' reset-search-input='true'>
         <ui-select-match placeholder='Zoek gemeente...'>{{$select.selected.gm_naam}}</ui-select-match>
         <ui-select-choices repeat="gm in municipalities | orderBy:'gm_naam' | filter: {gm_naam: $select.search}">

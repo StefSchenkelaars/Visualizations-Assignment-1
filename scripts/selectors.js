@@ -37,7 +37,7 @@ angular.module('MyApp.selectors', [
     $log.debug('MyApp.selectors.ScopeSelectorCtrl: Initialized');
 
     // Load items from data
-    loadScopes();
+    if(Data.mapData !== undefined) loadScopes();
     $scope.$on('DataLoaded', loadScopes);
     function loadScopes(){
         $scope.scopes = Data.scopes;

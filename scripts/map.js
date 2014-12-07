@@ -22,7 +22,7 @@ angular.module('MyApp.map', [
     // projection is centered on the geographical center of the country, which
     // happens to be the city of Lunteren.
     var scale = height*900/50; // Make the map full height for the browser
-    var xOffsetMap = 125; // Move the map horizontal (for the legend)
+    var xOffsetMap = 75; // Move the map horizontal (for the legend)
     var projection = d3.geo.albers()
         .rotate([0, 0])
         .center([5.6, 52.1])
