@@ -96,12 +96,29 @@ angular.module('MyApp.data', [])
         datafield: 'AUTO_LAND',
         color: 'darkred'
     },
+    // Burgelijke staat
+    {
+        title: 'Percentage getrouwd',
+        category: 'Burgelijke staat',
+        datafield: 'P_GEHUWD',
+        color: 'lightslategray'
+    },{
+        title: 'Percentage huishoudens met kinderen',
+        category: 'Burgelijke staat',
+        datafield: 'P_HH_M_K',
+        color: 'black'
+    },
     // Leeftijd
     {
         title: 'Percentage 65+',
         category: 'Leeftijd',
         datafield: 'P_65_EO_JR',
         color: 'blue'
+    },{
+        title: 'Percentage kinderen tot 5 jaar',
+        category: 'Leeftijd',
+        datafield: 'P_00_04_JR',
+        color: 'darkblue'
     }];
 
     return_object.setScope = function(scope){
